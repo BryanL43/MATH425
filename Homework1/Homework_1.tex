@@ -1,0 +1,284 @@
+\documentclass{article}
+\usepackage{amsthm, amssymb,amsmath}
+\usepackage{graphicx} % Required for inserting images
+\setlength\parindent{0pt} % No indentation for file
+
+\title{MATH425 - Homework 1}
+\author{Bryan Lee}
+\date{September 9, 2024}
+
+\begin{document}
+
+\maketitle
+
+\section*{Exercise 2}
+In this exercise, we will use the following matrix to illustrate how to compute the LU decomposition
+and how to use it:
+$$ A = \left( \begin{array}{rrrr} -8 & -2 & 3 & 1 \\ 1 & -2 & 0 & 2 \\ -4 & -1 &
+3 & 2 \\ 4 & 1 & -1 & -1 \end{array} \right)$$
+By Gaussian elimination, one can reduce the above $A$ to an upper triangular matrix
+by using row operations of the type $cR_i + R_j \rightarrow R_j$. \\
+{\bf a)} State the first-row operation you would do in order to reduce $A$ to an
+upper triangular matrix and apply this row operation to
+obtain the matrix $A_1$.\\
+
+\[
+A = 
+\left(
+\begin{array}{rrrr}
+-8 & -2 & 3 & 1 \\
+1 & -2 & 0 & 2 \\
+-4 & -1 & 3 & 2 \\
+4 & 1 & -1 & -1 
+\end{array}
+\right)
+\hspace{0.1cm}
+\begin{aligned}
+& \frac{1}{8}R_1 + R_2 \rightarrow R_2 \quad\Longrightarrow
+\end{aligned}
+A_1 =
+\left(
+\begin{array}{rrrr}
+-8 & -2 & 3 & 1 \\
+0 & -\frac{9}{4} & \frac{3}{8} & \frac{17}{8} \\
+-4 & -1 & 3 & 2 \\
+4 & 1 & -1 & -1 
+\end{array}
+\right)
+\]\\
+
+{\bf b)} Find the corresponding elementary matrix $E_1$. Then compute $E_1A$. What
+do you observe? \\
+
+\[
+E_1 = 
+\left(
+\begin{array}{rrrr}
+1 & 0 & 0 & 0 \\
+\frac{1}{8} & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 
+\end{array}
+\right)
+\hspace{0.5cm} \& \hspace{0.5cm}
+E_1A =
+\left(
+\begin{array}{rrrr}
+-8 & -2 & 3 & 1 \\
+0 & -\frac{9}{4} & \frac{3}{8} & \frac{17}{8} \\
+-4 & -1 & 3 & 2 \\
+4 & 1 & -1 & -1 
+\end{array}
+\right)
+\]\\
+I observe that the matrix multiplication of $E_1A$ yields the $A_1$ matrix. It also turns the $a_{2,1}$ element into 0, the start of the upper-right triangle of 0s.\\\\
+
+{\bf c)} State and apply the next row operation that needs to be applied to $A_1$
+to obtain $A_2$. \\
+
+\[
+A_1 =
+\left(
+\begin{array}{rrrr}
+-8 & -2 & 3 & 1 \\
+0 & -\frac{9}{4} & \frac{3}{8} & \frac{17}{8} \\
+-4 & -1 & 3 & 2 \\
+4 & 1 & -1 & -1 
+\end{array}
+\right)
+\hspace{0.1cm}
+\begin{aligned}
+& -\frac{1}{2}R_1 + R_3 \rightarrow R_3 \quad\Longrightarrow
+\end{aligned}
+A_2 =
+\left(
+\begin{array}{rrrr}
+-8 & -2 & 3 & 1 \\
+0 & -\frac{9}{4} & \frac{3}{8} & \frac{17}{8} \\
+0 & 0 & \frac{3}{2} & \frac{3}{2} \\
+4 & 1 & -1 & -1 
+\end{array}
+\right)
+\]\\\\
+
+{\bf d)} Construct the corresponding elementary matrix $E_2$. Compute $E_2 A_1$. \\
+
+\[
+E_2 = 
+\left(
+\begin{array}{rrrr}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+-\frac{1}{2} & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 
+\end{array}
+\right)
+\hspace{0.5cm} \& \hspace{0.5cm}
+E_2A_1 =
+\left(
+\begin{array}{rrrr}
+-8 & -2 & 3 & 1 \\
+0 & -\frac{9}{4} & \frac{3}{8} & \frac{17}{8} \\
+0 & 0 & \frac{3}{2} & \frac{3}{2} \\
+4 & 1 & -1 & -1 
+\end{array}
+\right)
+\]\\\\
+
+{\bf e)} Now continue to construct $E_3$ and $ E_4$. Verify $E_4E_3E_2E_1A = U$
+where $U$ is an upper triangular matrix. \\
+
+\[
+A_2 =
+\left(
+\begin{array}{rrrr}
+-8 & -2 & 3 & 1 \\
+0 & -\frac{9}{4} & \frac{3}{8} & \frac{17}{8} \\
+0 & 0 & \frac{3}{2} & \frac{3}{2} \\
+4 & 1 & -1 & -1 
+\end{array}
+\right)
+\hspace{0.1cm}
+\begin{aligned}
+& \frac{1}{2}R_1 + R_4 \rightarrow R_4 \quad\Longrightarrow
+\end{aligned}
+A_3 =
+\left(
+\begin{array}{rrrr}
+-8 & -2 & 3 & 1 \\
+0 & -\frac{9}{4} & \frac{3}{8} & \frac{17}{8} \\
+0 & 0 & \frac{3}{2} & \frac{3}{2} \\
+0 & 0 & \frac{1}{2} & -\frac{1}{2}
+\end{array}
+\right)
+\hspace{0.1cm}
+\begin{aligned}
+& -\frac{1}{3}R_3 + R_4 \rightarrow R_4
+\end{aligned}
+\]\\
+
+\[
+\begin{aligned}
+\Longrightarrow \quad
+A_4 = E_4E_3E_2E_1A = U =
+\left(
+\begin{array}{rrrr}
+-8 & -2 & 3 & 1 \\
+0 & -\frac{9}{4} & \frac{3}{8} & \frac{17}{8} \\
+0 & 0 & \frac{3}{2} & \frac{3}{2} \\
+0 & 0 & 0 & -1
+\end{array}
+\right)
+\end{aligned}
+\]
+
+Thus,
+
+\[
+E_3 = 
+\left(
+\begin{array}{rrrr}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+\frac{1}{2} & 0 & 0 & 1 
+\end{array}
+\right)
+\hspace{0.5cm} \& \hspace{0.5cm}
+E_4 = 
+\left(
+\begin{array}{rrrr}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & -\frac{1}{3} & 1 
+\end{array}
+\right)
+\]\\\\
+
+{\bf f)} Compute the inverses of $E_1, \ldots, E_4$. State the pattern you see. \\
+
+\[
+E_1^{-1} = 
+\left(
+\begin{array}{rrrr|rrrr}
+1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+\frac{1}{8} & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 
+\end{array}
+\right)
+\hspace{0.1cm}
+\begin{aligned}
+& -\frac{1}{8}R_1 + R_2 \rightarrow R_2 \quad\Longrightarrow
+\end{aligned}
+\]\\
+
+\[
+\left(
+\begin{array}{rrrr|rrrr}
+1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & -\frac{1}{8} & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 
+\end{array}
+\right)
+\begin{aligned}
+& \quad\Longrightarrow
+\left(
+\begin{array}{rrrr}
+1 & 0 & 0 & 0 \\
+-\frac{1}{8} & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 
+\end{array}
+\right)
+\end{aligned}
+\]\\
+
+Repeated process for E2, E3, E4, thus:
+
+\[
+E_2^{-1} = 
+\left(
+\begin{array}{rrrr}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+\frac{1}{2} & 0 & 1 & 0 \\
+0 & 0 & 0 & 1 
+\end{array}
+\right)
+\hspace{0.5cm} \& \hspace{0.5cm}
+E_3^{-1} = 
+\left(
+\begin{array}{rrrr}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+-\frac{1}{2} & 0 & 0 & 1 
+\end{array}
+\right)
+\hspace{0.5cm} \& \hspace{0.5cm}
+E_4^{-1} = 
+\left(
+\begin{array}{rrrr}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & \frac{1}{3} & 1 
+\end{array}
+\right)
+\]\\
+
+Observation: The inverses swap the sign of the constant in the row operation $cR_i + R_j \rightarrow R_j$, where each row operation is represented by a $E_i$ matrix.\\\\
+
+{\bf g)} Argue that $A = LU$ where $L= E_1^{-1}E_2^{-1} E_3^{-1}E_4^{-1}$. What
+kind of matrix is $L$? \\
+We have obtained
+an LU factorization of $A$. To check your work, use \\
+{\tt >> [L, U] = lu(A)} \\
+command in MATLAB to get the LU factorization of $A$. \\
+
+Since $E_1, ..., E_4$ are matrices that represent the respective row operations performed on the matrix $A$ to obtain the upper-triangular matrix $U$, taking the inverse of $E_1, ..., E_4$, representing $L$, will undo these operations, restoring the upper-triangular matrix to its original form of $A$. Additionally, $L$ is a product of inverses of elementary matrices, and elementary matrices themselves are invertible. Thus, L is also invertible.
+
+\end{document}
