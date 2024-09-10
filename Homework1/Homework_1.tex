@@ -279,6 +279,17 @@ an LU factorization of $A$. To check your work, use \\
 {\tt >> [L, U] = lu(A)} \\
 command in MATLAB to get the LU factorization of $A$. \\
 
-Since $E_1, ..., E_4$ are matrices that represent the respective row operations performed on the matrix $A$ to obtain the upper-triangular matrix $U$, taking the inverse of $E_1, ..., E_4$, representing $L$, will undo these operations, restoring the upper-triangular matrix to its original form of $A$. Additionally, $L$ is a product of inverses of elementary matrices, and elementary matrices themselves are invertible. Thus, L is also invertible.
+Since $E_1, ..., E_4$ are matrices that represent the respective row operations performed on the matrix $A$ to obtain the upper-triangular matrix $U$, taking the inverse of $E_1, ..., E_4$, representing $L$, will undo these operations, restoring the upper-triangular matrix to its original form of $A$. Additionally, $L$ is a product of inverses of elementary matrices, and elementary matrices themselves are invertible. Thus, L is also invertible.\\\\\\\\
+
+
+\section*{Exercise 3}
+Suppose in the linear system $Ax = b$ the matrix $A$ is an $n \
+times n$ regular matrix. \\
+{\bf a)} Count the number of multiplication/division operations
+needed to find the solution $x$ by Gaussian elimination and backward substitution.
+The answer should be a formula involving a polynomial in $n$.
+What is the degree and the leading coefficient of this polynomial? \\
+
+
 
 \end{document}
