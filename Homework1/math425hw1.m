@@ -1,4 +1,4 @@
-% Question #1
+% Exercise #1
 A = [2 -1 2; -1 -1 3; 3 0 -2];
 b = [2; 1; 1];
 
@@ -22,7 +22,7 @@ function U = myGaussianElimination(A)
             A(i, j:end) = A(i, j:end) + factor * A(j, j:end);
         end
     end
-    U = A; % Return value upper-triangular matrix
+    U = A;
 end
 
 function x = myBackwardSubstitution(U, c)
@@ -73,18 +73,19 @@ end
 myLinearSolution(A, b)
 
 
-% Question #2
-
+% Exercise #2
 A = [-8 -2 3 1; 1 -2 0 2; -4 -1 3 2; 4 1 -1 -1];
-b = [-2; 6; -5; 1];
 
 % Acquire LU factorization of A
 [L, U, I] = lu(A)
 
-% 1st solve for y in Ly = b using forward substitution
+% Part h
+b = [-2; 6; -5; 1];
+
+% 1st step: solve for y in Ly = b using forward substitution
 y = L \ (I * b);
 
-% 2nd solve Ux = y
+% 2nd step: solve for x in Ux = y
 x = U \ y;
 
 solu = myLinearSolution(A, b);
@@ -93,8 +94,7 @@ disp("Is solving x using LU factorization of A equals to using myLinearSolution 
 disp(isequal(x, solu));
 
 
-% Question #3
-
+% Exercise #4
 H_5 = hilb(5)
 H_10 = hilb(10);
 H_15 = hilb(15);
@@ -105,7 +105,7 @@ Inverse_H_10 = inv(H_10)
 Inverse_H_15 = inv(H_15)
 Inverse_H_20 = inv(H_20)
 
-% The feature that jumps at me is the large number multiplied with the
+% The feature that jumps at me is the large number (the ...e+... numbers) multiplied with the
 % matrix. It even starts displaying a warning of inaccuracy at hilb(15).
 
 x = rand(15, 1)
@@ -118,6 +118,3 @@ check = H_15 * x_computed
 % Using x_computed is quite close to just x but with a margin of error.
 % There also seems to be some negative values in the x_computed compared to
 % regular x.
-
-
-% Question #5
