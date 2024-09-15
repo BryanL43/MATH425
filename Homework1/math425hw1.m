@@ -82,7 +82,7 @@ A = [-8 -2 3 1; 1 -2 0 2; -4 -1 3 2; 4 1 -1 -1];
 % Part h
 b = [-2; 6; -5; 1];
 
-% 1st step: solve for y in Ly = b using forward substitution
+% 1st step: solve for y in Ly = b
 y = L \ (I * b);
 
 % 2nd step: solve for x in Ux = y
@@ -113,8 +113,7 @@ b = H_15 * x
 
 x_computed = Inverse_H_15 * b
 
-check = H_15 * x_computed
-
-% Using x_computed is quite close to just x but with a margin of error.
-% There also seems to be some negative values in the x_computed compared to
-% regular x.
+% Comparing the true solution (x) with x_computed, I can see a large margin
+% of error. There are negative values in the x_computed compared to regular
+% x. Overall, the larger the Hilbert matrices are, the more unstable they
+% get.
