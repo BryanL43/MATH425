@@ -28,38 +28,44 @@ function U = myPartialPivot(A)
             U(j, i:n) = U(j, i:n) - factor * U(i, i:n);
         end
     end
-    disp("Number of row interchanges when doing partial pivoting:")
-    disp(rowInterchanged);
+    fprintf("Number of row interchanges when doing partial pivoting: %d\n", rowInterchanged);
 end
 
 function rank = myRank(A)
-    rank = 0;
+    [n, m] = size(A);
+    if n ~= m
+        error("Expected A to be an nxn matrix.");
+    end
+
     U = myPartialPivot(A);
-    [n, m] = size(U);
+    rank = 0;
     
+    % Iterate through each row of the upper-triangular matrix and counting
+    % non-zero rows to acquire rank of the matrix.
     for i = 1:n
-        if norm(U(i, :)) > 1e-12
+        if any(round(U(i, :), 10) ~= 0) % Using round to avoid floating-point precision issues
             rank = rank + 1;
         end
     end
 end
 
-%A = [1 0.6; 0.01 1.6];
-%A = [0.02 0.01 0 0; 1 2 1 0; 0 1 2 1; 0 0 100 200];
-
 P = rand(5, 3);
 Q = rand(3, 5);
 A = P * Q;
-disp(myRank(A));
+fprintf("Rank of A = P * Q: %d\n\n", myRank(A));
 
 
 % Exercise 2
 disp("Example of strictly diagonal dominant matrix, which is not a diagonal matrix:");
 A = [5 2 1 0; 1 6 1 2; 0 2 7 3; 0 0 1 8];
 disp(A);
+disp("We can see that there are non-zero elements outside the diagonals, thus not diagonal matrix.");
+fprintf("\n");
 
-%C = [-4 2 1; 1 6 2; 1 -2 5];
-%disp(C);
-%myPartialPivot(C);
-
+fprintf("No row interchanges with diagonally dominant matrix (shown below using the matrix A above):\n")
 myPartialPivot(A);
+
+fprintf("\nAnother example:\n");
+C = [5 1 1; 1 6 1; 1 1 7];
+disp(C);
+myPartialPivot(C);
