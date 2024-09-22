@@ -1,0 +1,259 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+
+\title{Homework 2}
+\author{Bryan Lee}
+\date{September 21, 2024}
+
+\begin{document}
+
+\maketitle
+
+\noindent {\bf 3.} Let $A$ be an $n \times n$ symmetric matrix. Describe a strategy
+of {\it symmetric pivoting} so that after the Gaussian elimination, the matrix
+$A$ is reduced to a diagonal matrix $D$. Make sure to argue that after each
+symmetric pivoting, the resulting matrix is still symmetric. [Hint: this will
+require both row and
+column operations]\\
+
+Using Theorem 1.34 from the textbook (page 45-46):\\
+A symmetric matrix A is regular if and only if it can be factored as\\
+$$ A = LDL^T $$\\
+where L is a lower uni-triangular matrix, and D is a diagonal matrix with nonzero diagonal
+entries.\\
+
+Theorem 1.29 also proves that we can factor
+$$ A = LDV $$\\
+where transposing both sides of the equation, noting that $V^T$ is a lower uni-triangular matrix, and $L^T$ is an upper uni-triangular matrix. Then, if A is symmetric, then\\
+$$ LDV = A = A^T = V^TDL^T $$\\
+Uniqueness of the $LDV$ factorization implies that\\
+$$L = V^T \quad \text{and} \quad V = L^T$$\\
+There is more in-depth proofing in the textbook, but I want to get to the primary address of the problem.\\
+
+Now let's assume a 3x3 matrix A:\\
+$$ A = \left( \begin{array}{rrr} 2 & 3 & 4 \\ 3 & 1 & 2 \\ 4 & 2 & 6 \end{array} \right)$$\\
+
+I) We want to find the upper-triangular matrix U:\\
+
+\[
+A = 
+\left(
+\begin{array}{rrr}
+2 & 3 & 4 \\
+3 & 1 & 2 \\
+4 & 2 & 6 \\
+\end{array}
+\right)
+\hspace{0.1cm}
+\begin{aligned}
+& -\frac{3}{2}R_1 + R_2 \rightarrow R_2 \quad\Longrightarrow
+\end{aligned}
+\left(
+\begin{array}{rrr}
+2 & 3 & 4 \\
+0 & -\frac{7}{2} & -4 \\
+4 & 2 & 6 \\
+\end{array}
+\right)
+\hspace{0.1cm}
+\begin{aligned}
+& -2R_1 + R_3 \rightarrow R_3
+\end{aligned}
+\]\\
+
+\[
+\begin{aligned}
+\Longrightarrow
+\end{aligned}
+\left(
+\begin{array}{rrr}
+2 & 3 & 4 \\
+0 & -\frac{7}{2} & -4 \\
+0 & 0 & \frac{18}{7} \\
+\end{array}
+\right) = U
+\]\\
+
+II) Now, we want to acquire the diagonal matrix D:\\
+\[
+D =
+\left(
+\begin{array}{rrr}
+2 & 3 & 4 \\
+0 & -\frac{7}{2} & -4 \\
+0 & 0 & \frac{18}{7} \\
+\end{array}
+\right) = 
+\left(
+\begin{array}{rrr}
+2 & 0 & 0 \\
+0 & -\frac{7}{2} & 0 \\
+0 & 0 & \frac{18}{7} \\
+\end{array}
+\right)
+\left(
+\begin{array}{rrr}
+1 & \frac{3}{2} & 2 \\
+0 & 1 & \frac{8}{7} \\
+0 & 0 & 1 \\
+\end{array}
+\right) = DV
+\]\\
+We can see that the L matrix corresponds to the LU-factorization of A and $V = L^T$,\\
+\[
+L =
+\left(
+\begin{array}{rrr}
+1 & 0 & 0 \\
+\frac{3}{2} & 1 & 0 \\
+2 & \frac{8}{7} & 1 \\
+\end{array}
+\right)
+\]\\
+But why is the values inverted? i.e. $-\frac{3}{2} \rightarrow \frac{3}{2}$. Since we are trying to prove $A = LDL^T$, we are seeking the inverse of L to reacquire A rather than finding upper-triangular matrix U.\\
+
+III) Now, since $A = LDL^T$, we can verify that it is indeed true.
+\[
+A = 
+\left(
+\begin{array}{rrr}
+1 & 0 & 0 \\
+\frac{3}{2} & 1 & 0 \\
+2 & \frac{8}{7} & 1 \\
+\end{array}
+\right)
+\left(
+\begin{array}{rrr}
+2 & 0 & 0 \\
+0 & -\frac{7}{2} & 0 \\
+0 & 0 & \frac{18}{7} \\
+\end{array}
+\right)
+\left(
+\begin{array}{rrr}
+1 & \frac{3}{2} & 2 \\
+0 & 1 & \frac{8}{7} \\
+0 & 0 & 1 \\
+\end{array}
+\right) = 
+\left(
+\begin{array}{rrr}
+2 & 3 & 4 \\
+3 & 1 & 2 \\
+4 & 2 & 6 \\
+\end{array}
+\right)
+\]\\
+
+\textbf{Reference: Textbook example 1.35 page 46}
+
+IV) But what does this mean in terms of finding diagonal matrix D while arguing that after each symmetric pivoting, the resulting matrix will remain symmetric?\\
+
+Let's apply the first-row operation (the $\frac{3}{2}$ from the L matrix) to begin finding our diagonal matrix D. This will turn $\frac{3}{2}$ into $-\frac{3}{2}$, effectively inverting $L$ and $L^T$ to find D, corresponding to the equation: $L^{-1}A(L^{-1})^T = D$\\
+
+\textbf{KEY NOTE:} The pivot value chosen will just be the diagonal values of A undergoing the row operations.\\
+
+\[
+\left(
+\begin{array}{rrr}
+1 & 0 & 0 \\
+-\frac{3}{2} & 1 & 0 \\
+0 & 0 & 1 \\
+\end{array}
+\right)
+\left(
+\begin{array}{rrr}
+2 & 3 & 4 \\
+3 & 1 & 2 \\
+4 & 2 & 6 \\
+\end{array}
+\right)
+\left(
+\begin{array}{rrr}
+1 & -\frac{3}{2} & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+\end{array}
+\right) = 
+\left(
+\begin{array}{rrr}
+2 & 0 & 4 \\
+0 & -\frac{7}{2} & -4 \\
+4 & -4 & 6 \\
+\end{array}
+\right)
+\]\\
+We can see that the matrix is indeed still symmetric after the 1st row and column pivoting.\\
+
+Now repeat for the next row and column operation:
+\[
+\left(
+\begin{array}{rrr}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+-2 & 0 & 1 \\
+\end{array}
+\right)
+\left(
+\begin{array}{rrr}
+2 & 0 & 4 \\
+0 & -\frac{7}{2} & -4 \\
+4 & -4 & 6 \\
+\end{array}
+\right)
+\left(
+\begin{array}{rrr}
+1 & 0 & -2 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+\end{array}
+\right) = 
+\left(
+\begin{array}{rrr}
+2 & 0 & 0 \\
+0 & -\frac{7}{2} & -4 \\
+0 & -4 & 2 \\
+\end{array}
+\right)
+\]\\
+The resulting matrix is still symmetric.\\
+
+Now, for the last operation:
+\[
+\left(
+\begin{array}{rrr}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & -\frac{8}{7} & 1 \\
+\end{array}
+\right)
+\left(
+\begin{array}{rrr}
+2 & 0 & 0 \\
+0 & -\frac{7}{2} & -4 \\
+0 & -4 & 2 \\
+\end{array}
+\right)
+\left(
+\begin{array}{rrr}
+1 & 0 & 0 \\
+0 & 1 & -\frac{8}{7} \\
+0 & 0 & 1 \\
+\end{array}
+\right) = 
+\left(
+\begin{array}{rrr}
+2 & 0 & 0 \\
+0 & -\frac{7}{2} & 0 \\
+0 & 0 & \frac{18}{7} \\
+\end{array}
+\right) = D
+\]\\
+The resulting matrix is still symmetric and is now the corresponding D matrix.\\
+
+Therefore, we can repeat the same strategy of symmetric pivoting for smaller/larger matrices in a more general form, using Theorem 1.34 as its foundation. After every row and column pivoting, the matrix remains symmetrical, and eventually, we acquire the diagonal matrix D.\\
+
+In a sense, for every row operation we apply to A, we will have to apply the transpose of said row operation (column operation) to keep the matrix symmetrical.\\
+
+\end{document}
