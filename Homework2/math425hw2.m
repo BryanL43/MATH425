@@ -62,10 +62,10 @@ disp(A);
 disp("We can see that there are non-zero elements outside the diagonals, thus not diagonal matrix.");
 fprintf("\n");
 
-fprintf("No row interchanges with diagonally dominant matrix (shown below using the matrix A above):\n")
+fprintf("No row interchanges with diagonally dominant matrix (shown below by partial pivoting the matrix A above):\n")
 myPartialPivot(A);
 
-fprintf("\nAnother example:\n");
+fprintf("\nAnother example to satisfy 2b:\n");
 C = [5 1 1; 1 6 1; 1 1 7];
 disp(C);
 myPartialPivot(C);
