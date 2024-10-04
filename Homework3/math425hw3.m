@@ -56,21 +56,56 @@ fprintf("Exercise 4:\n");
 function B = myGS(A)
     [m, n] = size(A);
     B = zeros(m, n);
-    V = A; % Use for intermediate vectors for computing
+    V = zeros(m, n);
 
-    % Iterate through matrix columns and perform modified Gram-Schmidt
+    % Iterate through augmented A matrix columns to compute orthogonal set
+    % {v_1, ..., v_n}
     for i = 1:n
-        % Normalize the current column vector
-        B(:, i) = V(:, i) / norm(V(:, i));
-
-        % For each j > i vectors, subtract the projection,
-        % i.e. <w_k, u_{k-1}>u_{k-1}
-        for j = i+1:n
-            V(:, j) = V(:, j) - (B(:, i)' * V(:, j)) * B(:, i);
+        v = A(:, i); % Acquire i-th column of A
+        
+        % For 2nd column vector and beyond, perform Gram-Schmidt process
+        for j = 1:i-1 % j loop will acquire previous vector
+            v = v - ( ( dot(v, V(:, j)) / dot(V(:, j), V(:, j)) ) * V(:, j) );
         end
+
+        V(:, i) = v; % Temp store the v to normalize at the end
+    end
+    
+    % Normalize to acquire orthonormal basis
+    for i = 1:n
+        B(:, i) = V(:, i) / norm(V(:, i));
     end
 end
 
-A = [1 0 1 1; 0 1 0 1; 1 0 0 1; 0 -1 1 1];
+function B = myGS2(A)
+    [m, n] = size(A);
+    B = zeros(m, n);
+
+    % Iterate through augmented A matrix columns
+    for i = 1:n
+        v = A(:, i); % Acquire i-th column of A
+        
+        % Orthogonalize v against all previous orthonormal vectors
+        for j = 1:i-1
+            v = v - dot(v, B(:, j)) * B(:, j);
+        end
+        
+        % Normalize to acquire orthonormal vector
+        B(:, i) = v / norm(v);
+    end
+end
+
+w1 = [1; 0; 1; 0];
+w2 = [0; 1; 0; -1];
+w3 = [1; 0; 0; 1];
+w4 = [1; 1; 1; 1];
+
+A = [w1 w2 w3 w4];
 B = myGS(A);
+disp("Regular GS:")
 disp(B);
+
+A2 = [w1 w2 w3 w4];
+B2 = myGS2(A2);
+disp("Modified GS:")
+disp(B2);
