@@ -7,8 +7,9 @@ v3 = [2; 0; 1; -1];
 b = [3; 0; -1; -2];
 A = [v1 v2 v3 b];
 disp(rref(A));
-disp("Taking the rref of the augmented matrix A = [ v1 v2 v3 | b ], we can see that the last row has 0s beside the b column.");
-disp("This means that the matrix is inconsistent and b is not a linear combination of v1, v2, and v3.");
+fprintf("Taking the rref of the augmented matrix A = [ v1 v2 v3 | b ],\n" + ...
+    "we can see that the last row has 0s beside the b column, i.e. 0 = 1.\n" + ...
+    "This means that the matrix is inconsistent and b is not a linear combination of v1, v2, and v3.\n");
 
 
 % Exercise 3
@@ -20,17 +21,14 @@ v4 = [4; -1; 3];
 
 fprintf("Exercise 3a:\n");
 A = [v1 v2 v3 v4];
-
-if (rank(A) == 3)
-    fprintf("The vectors v1, v2, v4, v4 span R^3.\n");
-else
-    fprintf("The vectors v1, v2, v3, v4 do NOT span R^3.\n");
-end
-fprintf("Since the rank of A does not equals to 3, but instead it is %d.\n" + ...
-    "the vectors spans R^%d.\n", rank(A), rank(A));
+fprintf("To span R^3, we need a set of three linearly indendent vectors\n" + ...
+    "which can be identified by determining the rank.\n");
+disp("rref of A:")
 disp(rref(A));
-fprintf("Taking the rref of matrix A also shows that v3 and v4 are a combination of\n" + ...
-    "v1 and v2, where v3 = (-1 * v1) + v2 and v4 = v1 + v2.\n");
+fprintf("The rank of the augmented matrix A has a rank of %d.\n", rank(A));
+
+fprintf("Since the rank of A does not equals to 3, but instead it is %d.\n" + ...
+    "The vectors do not spans R^3.\n", rank(A));
 
 fprintf("\nExercise 3b:\n");
 disp(rref(A));
@@ -39,14 +37,16 @@ fprintf("Additionally, according to the textbook Lemma 2.23 (pg. 96), it states 
     "any collection of k (column vectors) > n (row) vectors in R^n then the vectors are linearly dependent.\n");
 
 fprintf("\nExercise 3c:\n");
-fprintf("No, v1, v2, v3, v4 do not form a basis for R^3. Since the vectors only span R^2 as shown in 3a\n" + ...
-    "and aren't linearly independent as shown in 3b, then we cannot form a basis of R^3.\n");
-fprintf("Additionally, it is also not possible to choose some subset which is a basis, as the span of the\n" + ...
-    "vectors is only R^2.\n");
+fprintf("No, v1, v2, v3, v4 do not form a basis for R^3 because the vectors are linearly dependent.\n" + ...
+    "Shown in 3a, we found that the matrix comprised of the column vectors has a rank of 2.\n" + ...
+    "This means that there are only two linearly independent vectors in the set and are not sufficient to span R^3\n" + ...
+    "nor any subset.\n");
 
 fprintf("\nExercise 3d:\n");
-fprintf("The dimension of the span of v1, v2, v3, v4 is 2. As explained in 3a, there are only 2 linearly independent\n" + ...
-    "vectors in the set, shown by the rank(A) = 2.\n");
+fprintf("The dimension of the span of v1, v2, v3, and v4 is 2. Since the dimension reflects the number of vectors in the basis,\n" + ...
+    "we can determine this by examining the rank of the augmented matrix A. As demonstrated in part 3a, the rank is 2,\n" + ...
+    "which indicates that the basis of the subspace spanned by these vectors must contain 2 vectors.\n" + ...
+    "Therefore, we conclude that dim(span{v1, v2, v3, v4}) = 2.\n");
 
 
 % Exercise 4
