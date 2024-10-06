@@ -1,0 +1,107 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsthm, amssymb,amsmath}
+
+\title{Homework 3}
+\author{Bryan Lee}
+\date{October 4, 2024}
+
+\begin{document}
+
+\maketitle
+
+\noindent {\bf 1. a) } Let ${\bf v} \in \mathbb{R}^m$ and ${\bf w} \in \mathbb{R}^n$. Show that
+the $m \times n$ matrix ${\bf v} {\bf w}^T$ has a rank equal to $1$. Assuming that v and w cannot be zero vectors.\\
+
+\[
+vw^T = 
+\begin{pmatrix}
+v_1\\
+v_2\\
+\vdots\\
+v_m
+\end{pmatrix}
+\hspace{0.1cm}
+\begin{pmatrix}
+w_1 & w_2 & \dots & w_n
+\end{pmatrix}
+\]\\
+\[
+=
+\begin{pmatrix}
+v_1w_1 & v_1w_2 & \dots & v_1w_n\\
+v_2w_1 & v_2w_2 & \dots & v_2w_n\\
+\vdots & \vdots & \ddots & \vdots\\
+v_mw_1 & v_mw_2 & \dots & v_mw_n\\
+\end{pmatrix}
+\]\\
+From doing the dot product of $vw^T$, we acquire a matrix where each row is a scale multiple of the vector $v$. Specifically, the i-th row of the matrix is $v_iw^T$, where  $v_i$ is the i-th element of the vector $v$. Since all rows are multiples of the same vector $v$, this means that the rows are linearly dependent and, therefore, multiples of each other. Now, if we proceed with reduced row echelon reduction by applying the following row operation for all $i = 2, 3, ..., m:$\\
+\[
+\frac{-v_i}{v_1}R_1 + R_i\rightarrow R_i
+\]
+
+\noindent{} We will get the following resulting matrix:
+
+\[
+\begin{pmatrix}
+v_1w_1 & v_1w_2 & \dots & v_1w_n\\
+0 & 0 & \dots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \dots & 0\\
+\end{pmatrix}
+\]\\
+
+\noindent{}Thus, we can see that the $mxn$ matrix $vw^T$ has a rank equal to 1.\\\\
+
+\noindent{\bf b)} Conversely, show that if $A$ is an $m \times n$ matrix with $\mathrm{rank}
+(A) = 1$, then $A = {\bf v} {\bf w}^T$ for some ${\bf v} \in \mathbb{R}^m$ and $w \in \mathbb{R}^n$\\
+
+\noindent Let A be an $m \times n$ matrix:
+\[
+A = 
+\begin{pmatrix}
+a_{1,1} & a_{1,2} & \dots & a_{1,n}\\
+a_{2,1} & a_{2,2} & \dots & a_{2,n}\\
+\vdots & \vdots & \ddots & \vdots\\
+a_{m,1} & a_{m,2} & \dots & a_{m,n}\\
+\end{pmatrix}
+\]\\
+
+\noindent Now, given that $A$ is an $R^{m \times n}$ and that rank(A) = 1, it means that all rows of A are multiple of each other. To be more precise, the rows of A can be expressed as a scalar multiple of a non-zero row. For example, taking the first row of A (denoted by $A_1$), you can express the rows of the matrix A as:
+
+\[
+A_i = v_iA_1
+\]
+Where each subsequent row $A_i$ there exists a scalar $v_i \in \mathbb{R}$.\\
+
+\noindent Ultimately, you will get the following matrix:
+
+\[
+A = 
+\begin{pmatrix}
+v_1a_{1,1} & v_1a_{1,2} & \dots & v_1a_{1,n}\\
+v_2a_{1,1} & v_2a_{1,2} & \dots & v_2a_{1,n}\\
+\vdots & \vdots & \ddots & \vdots\\
+v_ma_{1,1} & v_ma_{1,2} & \dots & v_ma_{1,n}\\
+\end{pmatrix}
+\]\\
+
+\noindent Thus, to construct the matrix A, we take the \underline{outer product} of the vectors v and w, where $w^T = (a_{1,1}, a_{1,2}, ..., a_{1,n}$). This gives us:\\
+\[
+A = vw^T = 
+\begin{pmatrix}
+v_1 \\
+v_2 \\
+\vdots \\
+v_m
+\end{pmatrix}
+\hspace{0.1cm}
+\begin{pmatrix}
+a_{1,1} & a_{1,2} & \dots & a_{1,n}
+\end{pmatrix}
+\]\\
+
+\noindent Therefore, if A is an $m \times n$ matrix with rank(A) = 1, then $A = vw^T$ for some ${\bf v} \in \mathbb{R}^m$ and $w \in \mathbb{R}^n$.\\
+
+
+\end{document}
