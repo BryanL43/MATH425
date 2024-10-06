@@ -22,7 +22,7 @@ v4 = [4; -1; 3];
 fprintf("Exercise 3a:\n");
 A = [v1 v2 v3 v4];
 fprintf("To span R^3, we need a set of three linearly indendent vectors\n" + ...
-    "which can be identified by determining the rank.\n");
+    "which can be identified by determining the augmented vector's matrix rank.\n");
 disp("rref of A:")
 disp(rref(A));
 fprintf("The rank of the augmented matrix A has a rank of %d.\n", rank(A));
@@ -38,9 +38,9 @@ fprintf("Additionally, according to the textbook Lemma 2.23 (pg. 96), it states 
 
 fprintf("\nExercise 3c:\n");
 fprintf("No, v1, v2, v3, v4 do not form a basis for R^3 because the vectors are linearly dependent.\n" + ...
-    "Shown in 3a, we found that the matrix comprised of the column vectors has a rank of 2.\n" + ...
-    "This means that there are only two linearly independent vectors in the set and are not sufficient to span R^3\n" + ...
-    "nor any subset.\n");
+    "As shown in part 3a, the matrix comprised of these column vectors has a rank of 2.\n" + ...
+    "This means that there are only two linearly independent vectors in the set, which is not sufficient to span R^3,\n" + ...
+    "where three independent vectors are required for a basis.\n");
 
 fprintf("\nExercise 3d:\n");
 fprintf("The dimension of the span of v1, v2, v3, and v4 is 2. Since the dimension reflects the number of vectors in the basis,\n" + ...
@@ -55,6 +55,10 @@ fprintf("Exercise 4:\n");
 
 function B = myGS(A)
     [m, n] = size(A);
+    if n > m
+        error("Dimension do not agree. Must be n <= m.");
+    end
+
     B = zeros(m, n);
     V = zeros(m, n);
 
@@ -63,8 +67,9 @@ function B = myGS(A)
     for i = 1:n
         v = A(:, i); % Acquire i-th column of A
         
-        % For 2nd column vector and beyond, perform Gram-Schmidt process
-        for j = 1:i-1 % j loop will acquire previous vector
+        % Repeatedly subtract the projections onto the previously
+        % calculated columns (besides the 1st column)
+        for j = 1:i-1
             v = v - ( ( dot(v, V(:, j)) / dot(V(:, j), V(:, j)) ) * V(:, j) );
         end
 
@@ -79,13 +84,18 @@ end
 
 function B = myGS2(A)
     [m, n] = size(A);
+    if n > m
+        error("Dimension do not agree. Must be n <= m.");
+    end
+
     B = zeros(m, n);
 
     % Iterate through augmented A matrix columns
     for i = 1:n
         v = A(:, i); % Acquire i-th column of A
         
-        % Orthogonalize v against all previous orthonormal vectors
+        % Orthogonalize current column against all previous 
+        % orthonormal vectors (besides the 1st column)
         for j = 1:i-1
             v = v - dot(v, B(:, j)) * B(:, j);
         end
