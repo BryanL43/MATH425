@@ -7,11 +7,79 @@ x = rand(4, 1);
 disp(norm(Q * x));
 disp(norm(x));
 
+% Imported functions to support Exercise 2
+function U = myGaussianElimination(A)
+    % Check if matrix is an n*(n+1) matrix
+    [n, m] = size(A);
+    if m ~= n+1
+        error("Input matrix must be an n*(n+1) matrix.");
+    end
+
+    for j = 1: n % Iterate through rows
+        % Check for zero pivot
+        if A(j, j) == 0
+            error("Pivot element is zero.");
+        end
+
+        for i = j + 1: n % Iterate through column
+            factor = -1 * (A(i, j) / A(j, j)); % Compute elimiantion factor
+
+            % Apply row operation to make the entries below the pivot zero
+            A(i, j:end) = A(i, j:end) + factor * A(j, j:end);
+        end
+    end
+    U = A;
+end
+
+function x = myBackwardSubstitution(U, c)
+    [n_U, m_U] = size(U);
+    [n_c, m_c] = size(c);
+
+    % Check matrices dimensions
+    if n_c ~= n_U || m_U ~= n_U || m_c ~= 1
+        error("Dimensions of U is not n*n or c is not n*1.");
+    end
+
+    x = zeros(n_U, 1); % Initialize solution vector
+    
+    % Iterate through the rows in ascending order
+    for i = n_U: -1: 1
+        sum = c(i); % Acquire RHS values for the current row
+        
+        % Subtract the already computed x values
+        for j = i + 1: n_U
+            sum = sum - U(i, j) * x(j);
+        end
+
+        % Divide the diagonal element
+        x(i) = sum / U(i, i);
+    end
+end
+
+function solution = myLinearSolution(A, b)
+    [n_A, m_A] = size(A);
+    [n_b, m_b] = size(b);
+    
+    % Check matrices dimensions
+    if n_b ~= n_A || m_A ~= n_A || m_b ~= 1
+        error("Dimensions of A is not n*n or b is not n*1.");
+    end
+
+    Ab = [A b]; % Augment A & b
+    
+    upperTriMatrix = myGaussianElimination(Ab);
+    
+    % Split the upper-triangular matrix from the augmented RHS
+    U = upperTriMatrix(:, 1: end - 1);
+    c = upperTriMatrix(:, end);
+
+    solution = myBackwardSubstitution(U, c);
+end
 
 % Exercise 2
 fprintf("\nExercise 2:\n");
 % Part a
-nValues = [5]; % Add 10 and 20 later
+nValues = [5, 10, 20];
 for n = nValues
     fprintf("For n = %d\n", n);
     H = hilb(n); % Generate Hilbert matrix
@@ -38,18 +106,26 @@ for n = nValues
     disp(b_star);
 
     % Solving Hx = b* using first Gaussian elimination
-    x_gauss = H \ b_star;
-    disp("Solving Hx = b* using Gaussian elimination:")
-    disp(x_gauss);
+    x_gauss_star = myLinearSolution(H, b_star);
+    disp("Solving Hx = b* using Gaussian elimination:");
+    disp("x_gauss* = ");
+    disp(x_gauss_star);
 
     % Solving Hx = b* using QR factorization
     [Q, R] = qr(H);
-    y = Q' * b_star;
-    x_qr = R \ y;
-    disp("Solving Hx = b* using QR factorization:")
-    disp(x_qr);
+    y = Q' * b_star; % Computing LHS: Rx = Q^T * b*
+    x_qr_star = myBackwardSubstitution(R, y); % Solving Rx = y
+    disp("Solving Hx = b* using QR factorization:");
+    disp("x_qr* = ");
+    disp(x_qr_star);
 end
 
+fprintf("Comparing the two methods to the correct solution x*:\n" + ...
+    "QR-factorization is more stable then Gaussian elimination as the Hilbert matrix gets larger.\n" + ...
+    "The pros of using Gaussian Elimination is that it is conceptually straightforward and easy to implement.\n" + ...
+    "It is also efficient for small matrices. However, Gaussian is more numerically instable especially for Hilbert matrices.\n\n" + ...
+    "The pros of QR-factorization is that is is more numerically stable especially for large and Hilbert matrices.\n" + ...
+    "However, it requires more complex and requires additional computation than Gaussian elimination.\n")
 
 % Exercise 3
 fprintf("\nExercise 3:\n");
@@ -78,29 +154,28 @@ end
 A = [1 1 2; 1 0 -2; -1 2 3];
 I = eye(size(A));
 
-%disp("H1:")
+disp("H1:")
 v = A(:, 1);
-w = I(:, 1);
+w = norm(A(:, 1)) * I(:, 1);
 H1 = myHouseholder(v, w);
-%disp(H1);
+disp(H1);
 
-
-%disp("H2:")
+disp("H2:")
 A2 = H1 * A;
 v = A2(:, 2);
 v(1) = 0; % Set v_hat2's first element as 0
-w = I(:, 2);
+w = norm(v) * I(:, 2);
 H2 = myHouseholder(v, w);
-%disp(H2);
+disp(H2);
 
-%disp("Householder QR:")
+disp("Householder QR:")
 Q = H1 * H2;
-%disp(Q);
+disp(Q);
 R = H2 * A2;
-%disp(R);
+disp(R);
 
 % Double check with default MATLAB qr function
-%disp("MATLAB QR:")
+disp("MATLAB QR:")
 [q, r] = qr(A);
-%disp(q);
-%disp(r);
+disp(q);
+disp(r);
