@@ -1,12 +1,3 @@
-% Exercise 1 (Further verification for part d)
-fprintf("Exercise 1 (Further verification for part d:\n");
-A = rand(4,4);
-[Q, R] = qr(A);
-disp(Q);
-x = rand(4, 1);
-disp(norm(Q * x));
-disp(norm(x));
-
 % Imported functions to support Exercise 2
 function U = myGaussianElimination(A)
     % Check if matrix is an n*(n+1) matrix
