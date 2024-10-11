@@ -1,0 +1,121 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsthm, amssymb,amsmath}
+
+\title{Homework 4}
+\author{Bryan Lee}
+\date{October 10, 2024}
+
+\begin{document}
+
+\maketitle
+
+\noindent {\bf 1.} Recall that an $n \times n$ matrix $Q$ is orthogonal if the
+columns of $Q$ form an orthonormal basis of $\mathbb{R}^n$. This is equivalent to
+$Q^TQ = QQ^T = I_n$. \\
+{\bf a)} Show that the product of two $n \times n$ orthogonal matrices is an
+orthogonal matrix. \\
+
+\noindent Let $Q_1 = Q_1Q_2$, then we have
+\[
+Q^T = (Q_1Q_2)^T = Q_2^TQ_1^T
+\]
+Now, to verify orthogonality (multiplying both sides with Q):\\
+\[
+Q^TQ = (Q_2^TQ_1^T)(Q_1Q_2)
+\]
+\[
+Q^TQ = Q_2^T(Q_1^TQ_1)Q_2
+\]
+\[
+Q^TQ = Q_2^TI_nQ_2
+\]
+\[
+Q^TQ = I_n
+\]
+Thus, the product of the two $nxn$ orthogonal matrices is an orthogonal matrix because $Q^TQ = I_n$ where Q is the product of the two $nxn$ orthogonal matrices.\\\\
+
+\noindent {\bf b)} Prove that if $Q$ is an orthogonal matrix, so is $Q^T$. Deduce that the
+rows of an orthogonal matrix also form an orthonormal basis. \\
+
+\noindent Given that $Q^TQ = QQ^T = I_n$, then
+\[
+(Q^TQ)^T = I_n
+\]
+\[
+(Q^T)^TQ^T = I_n \Leftrightarrow QQ^T = I_n
+\]
+This shows that if Q is an orthogonal matrix, so is $Q^T$. We know that if Q is orthogonal, then its columns form an orthonormal basis for $\mathbb{R}^n$. Now, since we have just proven that $Q^T$ is also orthogonal, we can consider the columns of $Q^T$. The columns of $Q^T$ are exactly the rows of Q, due to transpose swapping the rows and columns. Thus, the rows of Q also form an orthonormal basis of $\mathbb{R}^n$.\\\\
+
+\noindent {\bf c)} Show that $\begin{pmatrix} \cos \theta & - \sin \theta \\ \sin \theta & \
+cos \theta \end{pmatrix}$ is an orthogonal matrix for any $0 \leq \theta < 2\pi$.
+What does this matrix do? \\
+
+\[
+Let\hspace{0.1cm}Q =
+\begin{pmatrix}
+cos\theta & -sin\theta\\
+sin\theta & cos\theta\\
+\end{pmatrix}
+\]
+Now, to show that it is orthogonal:
+\[
+i)\hspace{0.1cm}Q^T =
+\begin{pmatrix}
+cos\theta & sin\theta\\
+-sin\theta & cos\theta\\
+\end{pmatrix}
+\]
+\[
+ii)\hspace{0.1cm}Q^TQ =
+\begin{pmatrix}
+cos\theta & sin\theta\\
+-sin\theta & cos\theta\\
+\end{pmatrix}
+\begin{pmatrix}
+cos\theta & -sin\theta\\
+sin\theta & cos\theta\\
+\end{pmatrix} =
+\]
+\[
+\begin{pmatrix}
+cos\theta cos\theta + sin\theta sin\theta & cos\theta (-sin\theta) + sin\theta cos\theta \\
+(-sin\theta) cos\theta + cos\theta sin\theta & (-sin\theta) (-sin\theta) + cos\theta cos\theta
+\end{pmatrix} = 
+\]
+\[
+\begin{pmatrix}
+cos^2\theta + sin^2\theta & 0\\
+0 & sin^2\theta + cos^2\theta
+\end{pmatrix}
+=
+\begin{pmatrix}
+1 & 0 \\
+0 & 1 \\
+\end{pmatrix}
+=
+I_n
+\]
+Thus, $Q = \begin{pmatrix} \cos \theta & - \sin \theta \\ \sin \theta & \
+cos \theta \end{pmatrix}$ is an orthogonal matrix for any $0 \leq \theta < 2\pi$ as $Q^TQ = I_n$. The matrix represents a counterclockwise rotation by angle $\theta$.\\\\
+
+\noindent {\bf d)} Prove that if $Q$ is an $n \times n$ orthogonal matrix then $||Q {\bf x}
+|| = ||{\bf x}||$ for any ${\bf x} \in \mathbb{R}^n$. \\
+
+\noindent The norm of a vector $x \in \mathbb{R}^n$ is defined as:
+\[
+||x|| = \sqrt{x^Tx}
+\]
+\[
+||Qx|| = \sqrt{(Qx)^T(Qx)}
+\]
+Note: $(Qx)^T \Leftrightarrow x^TQ^T$
+\[
+||Qx|| = \sqrt{x^TQ^TQx}
+\]
+\[
+||Qx|| = \sqrt{x^Tx} = ||x||
+\]
+Thus, if Q is an $nxn$ orthogonal matrix then $||Qx|| = ||x||$ for any $x \in \mathbb{R}^n$.
+
+\end{document}
