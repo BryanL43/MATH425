@@ -141,7 +141,24 @@ function H = myHouseholder(v, w)
     H = I - 2 * (u * u') / (norm(u)^2);
 end
 
-% Following example 4.29 of the textbook to verify
+% Testing myHouseholder function
+v1 = randn(4, 1)
+v2 = randn(4, 1)
+v3 = randn(4, 1);
+
+H1 = myHouseholder(v1, v2);
+H2 = myHouseholder(v2, v3);
+H3 = myHouseholder(v1, v3);
+
+fprintf("Householder matrix H1 (from v1 to v2): \n");
+disp(H1);
+fprintf("Householder matrix H2 (from v2 to v3): \n");
+disp(H2);
+fprintf("Householder matrix H3 (from v1 to v3): \n");
+disp(H3);
+
+% Following example 4.29 of the textbook to verify integrity
+disp("Verifying myHouseholder function integrity with textbook example 4.29:")
 A = [1 1 2; 1 0 -2; -1 2 3];
 I = eye(size(A));
 
@@ -164,9 +181,3 @@ Q = H1 * H2;
 disp(Q);
 R = H2 * A2;
 disp(R);
-
-% Double check with default MATLAB qr function
-disp("MATLAB QR:")
-[q, r] = qr(A);
-disp(q);
-disp(r);
