@@ -77,9 +77,9 @@ for n = nValues
     
     disp("--- Part 2A ---")
     [Q, R] = qr(H);
-    disp("Q_n:");
+    fprintf("Q_%d\n", n);
     disp(Q);
-    disp("R_n:");
+    fprintf("R_%d\n", n);
     disp(R);
     
     disp("--- Part 2B ---")
@@ -112,9 +112,10 @@ for n = nValues
 end
 
 fprintf("Comparing the two methods to the correct solution x*:\n" + ...
-    "QR-factorization is more stable then Gaussian elimination as the Hilbert matrix gets larger.\n" + ...
+    "QR-factorization is more stable then Gaussian elimination as the Hilbert matrix gets larger.\n\n" + ...
     "The pros of using Gaussian Elimination is that it is conceptually straightforward and easy to implement.\n" + ...
-    "It is also efficient for small matrices. However, Gaussian is more numerically instable especially for Hilbert matrices.\n\n" + ...
+    "It is also efficient for small matrices. However, Gaussian is more numerically instable especially for Hilbert matrices.\n" + ...
+    "It also fails if a pivot is zero.\n\n" + ...
     "The pros of QR-factorization is that is is more numerically stable especially for large and Hilbert matrices.\n" + ...
     "However, it requires more complex and requires additional computation than Gaussian elimination.\n")
 
@@ -141,21 +142,32 @@ function H = myHouseholder(v, w)
     H = I - 2 * (u * u') / (norm(u)^2);
 end
 
-% Testing myHouseholder function
+% Testing myHouseholder function with 3 random vectors in R^4
 v1 = randn(4, 1)
 v2 = randn(4, 1)
 v3 = randn(4, 1);
 
+disp("Test 1 (myHouseholder(v1, v2)):");
+v1_hat = v1 / norm(v1);
+v2_hat = v2 / norm(v2);
 H1 = myHouseholder(v1, v2);
+
+disp('H1 * v1_hat and v2_hat:');
+disp([H1 * v1_hat, v2_hat]);
+
+disp("Test 2 (myHouseholder(v2, v3)):");
+v3_hat = v3 / norm(v3);
 H2 = myHouseholder(v2, v3);
+
+disp('H2 * v2_hat and v3_hat:');
+disp([H2 * v2_hat, v3_hat]);
+
+disp("Test 3 (myHouseholder(v1, v3)):");
 H3 = myHouseholder(v1, v3);
 
-fprintf("Householder matrix H1 (from v1 to v2): \n");
-disp(H1);
-fprintf("Householder matrix H2 (from v2 to v3): \n");
-disp(H2);
-fprintf("Householder matrix H3 (from v1 to v3): \n");
-disp(H3);
+disp('H3 * v1_hat and v3_hat:');
+disp([H3 * v1_hat, v3_hat]);
+
 
 % Following example 4.29 of the textbook to verify integrity
 disp("Verifying myHouseholder function integrity with textbook example 4.29:")
