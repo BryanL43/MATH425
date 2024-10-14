@@ -16,7 +16,7 @@ $Q^TQ = QQ^T = I_n$. \\
 {\bf a)} Show that the product of two $n \times n$ orthogonal matrices is an
 orthogonal matrix. \\
 
-\noindent Let $Q_1 = Q_1Q_2$, then we have
+\noindent Let $Q = Q_1Q_2$, then we have
 \[
 Q^T = (Q_1Q_2)^T = Q_2^TQ_1^T
 \]
@@ -38,12 +38,9 @@ Thus, the product of the two $nxn$ orthogonal matrices is an orthogonal matrix b
 \noindent {\bf b)} Prove that if $Q$ is an orthogonal matrix, so is $Q^T$. Deduce that the
 rows of an orthogonal matrix also form an orthonormal basis. \\
 
-\noindent Given that $Q^TQ = QQ^T = I_n$, then
+\noindent Suppose that $Q^T$ is an orthogonal matrix, then:
 \[
-(Q^TQ)^T = I_n
-\]
-\[
-(Q^T)^TQ^T = I_n \Leftrightarrow QQ^T = I_n
+(Q^T)^TQ^T = QQ^T = I_n \Leftrightarrow Q^T(Q^T)^T = Q^TQ = I_n
 \]
 This shows that if Q is an orthogonal matrix, so is $Q^T$. We know that if Q is orthogonal, then its columns form an orthonormal basis for $\mathbb{R}^n$. Now, since we have just proven that $Q^T$ is also orthogonal, we can consider the columns of $Q^T$. The columns of $Q^T$ are exactly the rows of Q, due to transpose swapping the rows and columns. Thus, the rows of Q also form an orthonormal basis of $\mathbb{R}^n$.\\\\
 
@@ -97,7 +94,47 @@ cos^2\theta + sin^2\theta & 0\\
 I_n
 \]
 Thus, $Q = \begin{pmatrix} \cos \theta & - \sin \theta \\ \sin \theta & \
-cos \theta \end{pmatrix}$ is an orthogonal matrix for any $0 \leq \theta < 2\pi$ as $Q^TQ = I_n$. The matrix represents a counterclockwise rotation by angle $\theta$.\\\\
+cos \theta \end{pmatrix}$ is an orthogonal matrix for any $0 \leq \theta < 2\pi$ as $Q^TQ = I_n$. The matrix represents a rotational matrix. If we apply Q to a vector v, it will rotate it  counterclockwise by $\theta$.\\
+\[
+Qv =
+\begin{pmatrix}
+cos\theta & -sin\theta\\
+sin\theta & cos\theta\\
+\end{pmatrix}
+\begin{pmatrix}
+x \\
+y \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+xcos\theta - ysin\theta\\
+xsin\theta + ycos\theta\\
+\end{pmatrix}
+\]\\
+For example, taking vector
+\[
+v = 
+\begin{pmatrix}
+1\\
+2\\
+\end{pmatrix}
+\]
+and flipping it across the y-axis by rotating v by $\theta = \pi$\\
+\[
+\begin{pmatrix}
+cos\pi & -sin\pi\\
+sin\pi & cos\pi\\
+\end{pmatrix}
+\begin{pmatrix}
+1 \\
+2 \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+-1\\
+-2\\
+\end{pmatrix}
+\]\\\\
 
 \noindent {\bf d)} Prove that if $Q$ is an $n \times n$ orthogonal matrix then $||Q {\bf x}
 || = ||{\bf x}||$ for any ${\bf x} \in \mathbb{R}^n$. \\
@@ -116,6 +153,8 @@ Note: $(Qx)^T \Leftrightarrow x^TQ^T$
 \[
 ||Qx|| = \sqrt{x^Tx} = ||x||
 \]
-Thus, if Q is an $nxn$ orthogonal matrix then $||Qx|| = ||x||$ for any $x \in \mathbb{R}^n$.
+Thus, if Q is an $nxn$ orthogonal matrix then $||Qx|| = ||x||$ for any $x \in \mathbb{R}^n$.\\\\
+
+\noindent {\bf 2c)} Just to be implicitly clear: The answer to part 2c is above the myHouseholder function as a print statement in the MATLAB code.
 
 \end{document}
