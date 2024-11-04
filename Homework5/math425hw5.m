@@ -60,8 +60,8 @@ b = prices'; % transposed to vertical vector
 x_star = (A' * A)^-1 * A' * b;
 
 % Acquire equation from x_star
-alpha = x_star(1)
-beta = x_star(2)
+alpha = x_star(1);
+beta = x_star(2);
 fprintf("Equation of least square line is about: y = %.2f + %.2fx\n", alpha, beta);
 
 % Estimate the median price of a house in the year 2005 & 2010
@@ -150,6 +150,9 @@ plot(x, f_x, "r-", "LineWidth", 1.5);
 hold on;
 plot(x, q1, 'b--', 'LineWidth', 1.5);
 hold off;
+
+xticks([0 pi/2 pi 3*pi/2 2*pi]);
+xticklabels({'0', '\pi/2', '\pi', '3\pi/2', '2\pi'});
 
 % Labels
 title("Comparison of f(x) = x^2 and q_1(x) via Fourier reconstruction");
