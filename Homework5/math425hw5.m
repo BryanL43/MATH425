@@ -103,12 +103,14 @@ for k = 0:n-1
 end
 
 % Part d:
-% Define x as a range of values from 0 to 2*pi
-x = linspace(0, 2*pi, 100);
+x = linspace(0, 2*pi, 100); % range of values from 0 to 2*pi
 
-p1 = real(c(1)) * ones(size(x));
+p1 = real(c(1)) * ones(size(x)); % % real part init with 1st term
+p2 = zeros(size(x)); % imaginary part but real-valued
+
 for k = 1:n-1
-    p1 = p1 + real(c(k + 1)) * cos(k * x) - imag(c(k + 1)) * sin(k * x);
+    p1 = p1 + real(c(k + 1)) * cos(k * x);
+    p2 = p2 + imag(c(k + 1)) * sin(k * x);
 end
 
 % Part e:
@@ -120,6 +122,9 @@ plot(x, f_x, "r-", "LineWidth", 1.5);
 hold on;
 plot(x, p1, 'b--', 'LineWidth', 1.5);
 hold off;
+
+xticks([0 pi/2 pi 3*pi/2 2*pi]);
+xticklabels({'0', '\pi/2', '\pi', '3\pi/2', '2\pi'});
 
 % Labels
 title("Comparison of f(x) = x^2 and p_1(x) via Fourier approximation");
@@ -137,10 +142,13 @@ for k = -4:3
 end
 
 % Part g:
-q1 = real(c(1)) * ones(size(x));
-i = 1; %T o keep track of c vector position to read from
+q1 = real(c(1)) * ones(size(x)); % real part init with 1st term
+q2 = zeros(size(x)); % imaginary part but real-valued
+
+i = 1; % To keep track of c vector position to read from
 for k =-3:3
-    q1 = q1 + real(c(i)) * cos(k * x) - imag(c(i)) * sin(k * x);
+    q1 = q1 + real(c(i)) * cos(k * x);
+    q2 = q2 + imag(c(i)) * sin(k * x);
     i = i + 1;
 end
 
