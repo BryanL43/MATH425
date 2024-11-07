@@ -98,19 +98,17 @@ end
 % Part c:
 c = zeros(n, 1); % init coefficient vector
 
-for k = 0:n-1
-    c(k + 1) = (1 / n) * dot(f, omega(:, k + 1));  % Compute the inner product and scale by 1/8
+for k = 1:n
+    c(k) = (1 / n) * dot(omega(:, k), f);  % Compute the inner product and scale by 1/8
 end
 
 % Part d:
 x = linspace(0, 2*pi, 100); % range of values from 0 to 2*pi
 
-p1 = real(c(1)) * ones(size(x)); % % real part init with 1st term
-p2 = zeros(size(x)); % imaginary part but real-valued
-
-for k = 1:n-1
-    p1 = p1 + real(c(k + 1)) * cos(k * x);
-    p2 = p2 + imag(c(k + 1)) * sin(k * x);
+%p1 = real(c(1)) * ones(size(x)); % % real part init with 1st term
+p1 = zeros(size(x));
+for k = 0:n-1
+    p1 = p1 + real(c(k + 1)) * cos(k * x) - imag(c(k + 1)) * sin(k * x);
 end
 
 % Part e:
@@ -133,22 +131,30 @@ ylabel("f(x)");
 legend("f(x) = x^2", "p_1(x)");
 
 % Part f:
-c = zeros(n, 1); % init modified coefficient vector
+zeta_8 = exp(1i * 2 * pi / n); % ζ8
+omega = zeros(n, n); % matrix to hold w_ks
 
-i = 1; % To keep track of c vector position to add to
+% Iterate over k from -4 to 3
+i = 1;
 for k = -4:3
-    c(i) = (1 / n) * dot(f, omega(:, i));
+    for j = 0:n-1
+        omega(j + 1, i) = zeta_8^(j * k); % ζ8
+    end
     i = i + 1;
 end
 
+c = zeros(n, 1); % init modified coefficient vector
+
+for k = 1:n
+    c(k) = (1 / n) * dot(omega(:, k), f);  % Compute the inner product and scale by 1/8
+end
+
 % Part g:
-q1 = real(c(1)) * ones(size(x)); % real part init with 1st term
-q2 = zeros(size(x)); % imaginary part but real-valued
+q1 = zeros(size(x));
 
 i = 1; % To keep track of c vector position to read from
-for k =-3:3
-    q1 = q1 + real(c(i)) * cos(k * x);
-    q2 = q2 + imag(c(i)) * sin(k * x);
+for k =-4:3
+    q1 = q1 + real(c(i)) * cos(k * x) - imag(c(i)) * sin(k * x);
     i = i + 1;
 end
 
