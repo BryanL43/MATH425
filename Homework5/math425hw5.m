@@ -111,7 +111,7 @@ end
 disp("Sample vector f:");
 disp(f);
 
-% Part b) 
+% Part b:
 zeta_8 = exp(1i * 2 * pi / n); % ζ8
 omega = zeros(n, n); % matrix to hold w_ks
 
