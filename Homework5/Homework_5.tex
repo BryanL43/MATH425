@@ -1,0 +1,116 @@
+\documentclass{article}
+\usepackage{amsthm, amssymb,amsmath}
+\usepackage{graphicx} % Required for inserting images
+
+\title{Homework 5}
+\author{Bryan Lee}
+\date{November 9, 2024}
+
+\begin{document}
+
+\maketitle
+
+\noindent
+{\bf 1.} Find the closest point from ${\bf b} = \begin{pmatrix} 1 \\ 1 \\ 2 \\-2 \end{pmatrix}$ to the subspace spanned by
+$$\begin{pmatrix} 1 \\ 2 \\ -1 \\0 \end{pmatrix}, \,\, \begin{pmatrix} 0 \\ 1 \\ -
+2 \\ -1 \end{pmatrix}, \,\, \begin{pmatrix} 1 \\ 0 \\ 3 \\ 2 \end{pmatrix}.$$
+Use any {\tt MATLAB} command that you think is useful to do this computation. \\
+
+\noindent {\tt Some further explanation on my computation on MATLAB:}\\
+Since there is no solution to the original problem of $rref([A | b])$ where A is the matrix with the three augmented vectors. We need to compute the least square solution. To do that, I compute via row operations $A^T Ax = A^T b$ where $A^T A$ becomes a symmetric matrix and $A^T b$ will be a vector.
+
+\[
+\hat{A} = A'A = 
+\begin{pmatrix}
+6 & 4 & -2\\
+4 & 6 & -8\\
+-2 & -8 & 14
+\end{pmatrix}
+\]
+\[
+\hat{b} = A'b = 
+\begin{pmatrix}
+1\\
+-1\\
+3
+\end{pmatrix}
+\]
+\[
+rref([\hat{A} | \hat{b}]) = 
+\left( \begin{array}{ccc|c}
+6 & 4 & -2 & 1 \\
+4 & 6 & -8 & -1 \\
+-2 & -8 & 14 & 3 \\
+\end{array} \right) = 
+\left( \begin{array}{ccc|c}
+1 & 0 & 1 & \frac{1}{2} \\
+0 & 1 & -2 & -\frac{1}{2} \\
+0 & 0 & 0 & 0 \\
+\end{array} \right)
+\]\\
+The rref shows that there is a free variable for the third unknown variable. We can assign that variable, let's say, $z$, as an arbitrary value $t$. Thus, we get the three equations: $x = \frac{1}{2} - t$, $y = -\frac{1}{2} + 2t$, and $z = t$. Now, putting the equation together as a vector:\\
+\[
+v = 
+\begin{pmatrix}
+\frac{1}{2} - t\\
+-\frac{1}{2} +2t\\
+t
+\end{pmatrix} = 
+\begin{pmatrix}
+\frac{1}{2}\\
+-\frac{1}{2}\\
+0
+\end{pmatrix} + t
+\begin{pmatrix}
+-1\\
+2\\
+1
+\end{pmatrix}
+\]\\
+Since t is an arbitrary value and z is a linear combination of the previous two vectors, we can take the basis vector and multiply it with A, giving us the closest points:
+\[
+A * v = 
+\begin{pmatrix}
+1 & 0 & 1\\
+2 & 1 & 0\\
+-1 & -2 & 3\\
+0 & -1 & 2
+\end{pmatrix}
+\begin{pmatrix}
+\frac{1}{2}\\
+-\frac{1}{2}\\
+0
+\end{pmatrix} = 
+\begin{pmatrix}
+\frac{1}{2} \\
+\frac{1}{2} \\
+\frac{1}{2} \\
+\frac{1}{2}
+\end{pmatrix}
+\]\\
+Running MATLAB A\slash b yields the same solution.
+\\\\
+
+\noindent{\bf 4.} Let $f(x) = x^2$ on the interval $[0,2\pi]$. In this exercise, you will
+compute the discrete Fourier coefficients $c_0, c_1, \ldots, c_7$ of $f$ from the
+sample vector
+$$ {\bf f} \, = \, \begin{pmatrix} f_0 \\ f_1 \\ \vdots \\ f_7 \end{pmatrix}$$
+where $f_j = f(j2\pi/8)$ for $j=0,\ldots, 7$. \\\\
+
+\noindent Part d) Explanation of computing $p(x)$ is explained as a comment in the MATLAB code.\\
+
+\noindent{\bf e)} Find out how you can plot the graph of a function in {\tt MATLAB}. Then
+plot the graphs of $f(x)$ and $p_1(x)$ on the interval $[0,2\pi]$. What do you see?\\
+
+\noindent Graph is rendered on Matlab code.\\
+Analysis of the $p_1(x)$ graph:\\
+The graph has a sinusoidal wave that has a few points that agree with $f(x) = x^2$. However, it does have a lot of "noise" and roughly follows the original $f(x)$ line. One peculiar aspect of the $p_1(x)$ graph is the sinusoidal wave alternation from being above the original $x^2$ to following it and ending up below it as it approached $2\pi$. Another noteworthy aspect of the $p_1(x)$ graph is the sudden drop off at $7\pi/4$ from following the $x^2$ line to 0. Overall, the graph approximately follows the original signal line, but only by agreeing at specific points.\\\\
+
+\noindent {\bf h)} Plot the graph of $f(x)$ and $q_1(x)$ on the interval $[0,2\pi]$. Now, what
+do you observe?\\
+
+\noindent Graph is rendered on Matlab code.\\
+Analysis of the $q_1(x)$ graph:\\
+The graph is still a tiny bit wavy, but it follows the original $x^2$ graph much more closely. Especially between the points $\pi/2$ and $3\pi/2$, the $q_1(x)$ graph hovers/on the $x^2$ line. The points between 0 and $\pi/2$ also seem to be a shifted sinusoidal wave before seemingly being forced to wrap on the $x^2$ graph afterward. There is still a sudden drop off at around $7\pi/4$ from following the $x^2$ line to 0. Overall, the $q_1(x)$ graph better represents the $x^2$ graph but is still only an approximation that is more accurate than $p_1(x)$.
+
+\end{document}
