@@ -24,7 +24,7 @@ disp(v);
 % by v_1, v_2, and v_3
 closestPoint = A * v;
 fprintf("The closest points is:\n");
-disp(closestPoint);
+disp(closestPoint); % vertical vector of all 0.5
 
 % Answer integrity check via direct least square:
 fprintf("Answer check via least square:\n");
