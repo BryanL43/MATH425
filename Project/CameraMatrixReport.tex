@@ -1,0 +1,181 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, amsthm, graphicx, geometry, listings, xcolor}
+\geometry{margin=1in}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+
+\lstset{
+    language=Matlab,                 % Language of the code
+    basicstyle=\ttfamily,            % Code font style
+    keywordstyle=\color{blue},       % Keywords color
+    commentstyle=\color{darkgreen},  % Comments color
+    stringstyle=\color{red},         % Strings color
+    breaklines=true,                 % Automatic line breaking
+    numbers=left,                    % Line numbers on the left
+    frame=single                     % Adds a border around the code
+}
+
+\title{Computation of the Camera Matrix}
+\author{Bryan Lee}
+\date{December 13, 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+In computer vision, the camera matrix P is a 3x4 matrix that defines the mathematical transformation mapping of 3D points in world space into their corresponding 2D coordinates on the camera's image plane. Essentially, it models how a camera perceives a scene by incorporating both the intrinsic camera parameters (such as focal length, principle point, skew, and distortion scale) and extrinsic parameters (position and orientation) required for this transformation.
+
+\section{Preliminaries}
+A standard camera matrix P takes the form:
+\[
+	\begin{array}{rrcl}
+        x = PX & \Leftrightarrow & x = KR[I_3 | -X_O]X
+	\end{array}
+\]
+Where \( x \) are the observed image points (2D), X is the given control coordinates in the world space (3D), K is the intrinsic (calibration) 3x3 matrix, R is the 3x3 rotation matrix, \( [I_3 | -X_O] \) represents the 3x4 extrinsic transformation (combining rotation and translation), and finally, \( X_O \) is the 3x1 translation matrix that represents the camera's position relative to the object.\\
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.5\linewidth]{PrelimCameraMatrixDiagram.png}
+    \caption{A simple diagram of the camera matrix: x = PX.}
+\end{figure}
+
+\noindent To compute the said camera matrix P, we will compute a linear solution:
+\begin{enumerate}
+    \item Compute an initial estimate of \( P \) via a linear approach:
+    \begin{enumerate}
+        \item Use a similarity transformation matrix \( T \) and \( U \) to normalize both the image and world space points.
+        \item Use direct linear transformation (DLT) to form a \( 2n \times 12 \) matrix \( A \) by stacking each corresponding normalized image and world points. The vector \( p \) will then contain the entries of the matrix \( \tilde{P} \). A solution of \( Ap = 0 \), with \( ||p|| = 1 \), is obtained from the singular vector with the smallest singular value.
+    \end{enumerate}
+
+    \item De-normalize the normalized camera matrix \( \tilde{P} \).
+\end{enumerate}
+
+\noindent \textbf{Note:} Point correspondences means \( \{ X_i \leftrightarrow x_i \} \).\\
+
+One observation that we need to note is that the current DLT approach assumes an affine camera model. This means that the projection matrix only involves scaling, rotation, and translation without any non-linear effects like perspective. DLT also solves for uncalibrated cameras, where the camera's intrinsic and extrinsic parameters are unknown, with the obvious consequence of losing accuracy.
+
+In the case of an uncalibrated camera, the projection matrix \( P \) contains 11 unknown parameters: nine from the intrinsic camera matrix \( K \) and three from the extrinsic parameters (the rotation matrix \( R \) and translation vector \( t \)). These unknowns need to be solved simultaneously using point correspondence between 3D world points and their 2D image projections.
+
+By using \( n \geq 6 \) corresponding world and image points, we can simultaneously solve the unknowns and mitigate geometric errors. Each point correspondence contributes two equations (for the x and y image coordinates), so with 6 points, we can acquire 12 equations, which is enough to solve for the 11 unknowns in \( P \).
+
+\section{Normalization of the image and world points}
+The first step to computing the transformation camera matrix \( P \) is to normalize the image points with their respective similarity transformation matrix \( T\). We want to take points \( x_i \) to a new set of points \( \tilde{x_i} \) such that the centroid of the points \( \tilde{x_i} \) is the coordinate origin \( (0, 0)^T \), and lastly scale the points to make the average distance from the origin to \( \sqrt{2} \). \\
+
+\noindent Given a set of 2D image points (x, y):
+\[
+    x = \{(x_1, y_1), ..., (x_n, y_n)\}
+\]
+The centroid of the points is computed as:
+\[
+        (\bar{x}, \bar{y}) = ( \frac{1}{n}\sum_{i=1}^{n} x_i,  \frac{1}{n}\sum_{i=1}^{n} y_i)
+        \text{, in other words: taking the mean of the points.}
+\]
+Next, we compute the new set of points \( \tilde{x_i} \) such that the centroid of the points \( \tilde{x_i} \) is the coordinate origin \( (0, 0)^T \):
+\[
+    \tilde{x}_i = x_i - \bar{x}, \quad \tilde{y}_i = y_i - \bar{y}
+\]
+The points are scaled to make the average distance from the origin equal to \( \sqrt{2} \). Let the distance of a point from the origin be:
+\[
+    d_i = \sqrt{\tilde{x}_i^2 + \tilde{y}_i^2}
+\]
+The scaling factor \( s \) is then computed as:
+\[
+    s = \frac{\sqrt{2}}{\frac{1}{n} \sum_{i=1}^{n} d_i}
+\]
+Next, we create the image point transformation matrix T:
+\[
+T = \begin{bmatrix}
+\text{s} & 0 & -\text{s} \cdot \bar{x} \\
+0 & \text{s} & -\text{s} \cdot \bar{y} \\
+0 & 0 & 1
+\end{bmatrix}
+\]
+Finally, we normalize the 2D image points with the similarity transformation T matrix:
+\[
+x_{\text{norm}} = (T \cdot x^T)^T
+\]
+
+\section{Computing the direct linear transformation (DLT)}
+\noindent
+{\bf 1.} Given the equation: x = Px, with x as the observed image point in 2-dimensions, and n $\geq$ b.
+\[ 
+X_{i} = P_{3 \times 4} X_{i} = 
+\begin{pmatrix}
+P_{11} & P_{12} & P_{13} & P_{14} \\
+P_{21} & P_{22} & P_{23} & P_{24} \\
+P_{31} & P_{32} & P_{33} & P_{34}
+\end{pmatrix} X_{i}
+\]
+
+\noindent Let:
+\[ 
+A = 
+\begin{pmatrix}
+P_{11} \\ P_{12} \\ P_{13} \\ P_{14}
+\end{pmatrix}
+B = 
+\begin{pmatrix}
+P_{21} \\ P_{22} \\ P_{23} \\ P_{24}
+\end{pmatrix}
+C = 
+\begin{pmatrix}
+P_{31} \\ P_{32} \\ P_{33} \\ P_{34}
+\end{pmatrix}
+\]
+
+\noindent Rearrange:
+\[
+\begin{pmatrix}
+U_{i} \\ V_{i} \\ W_{i}
+\end{pmatrix} = x_{i}=PX_{i} = 
+\begin{pmatrix}
+A^{T} \\ B^{T} \\ C^{T}
+\end{pmatrix} x_{i}
+\]\\
+
+\noindent 
+P = ($A^{T} \times X_{i}, B^{T} \times x_{i}, C^{T} \times x_{i}$) \\
+
+\noindent
+$P_{c} = (u_{i}, v_{i})$, we can use a similar triangle:
+$\frac{f}{C^{T} \times x_{i}} = \frac{u_{i}}{A^{T} \times X_{i}} = \frac{v_{i}}{B^{T} \times x_{i}}$ \\
+
+\noindent giving us: \\
+$x_{i} = \frac{u_{i}}{w_{i}} = \frac{A^{T} \times x_{i}}{C^{T} \times x_{i}}$,
+$y_{i} = \frac{v_{i}}{w_{i}} = \frac{B^{T} \times x_{i}}{C^{T} \times x_{i}}$\\
+
+\noindent for\\
+\[x_{1} = 
+\begin{pmatrix}
+x_{1}\\
+y_{i}\\
+1
+\end{pmatrix} = 
+\begin{pmatrix}
+u_{1}\\
+v_{i}\\
+w_{i}
+\end{pmatrix} = 
+\begin{pmatrix}
+A^{T} \times X_{i}\\
+B^{T} \times X_{i}\\
+C^{T} \times X_{i}
+\end{pmatrix}
+\]
+
+\noindent Thus, we obtain the following.\\
+$x_{i}C^{T}x_{i}-A^{T}x_{i} = 0, \\
+and \\
+y_{i}C6{T}x_{i} - B^{T}X_{i} = 0$\\
+
+\noindent To get:
+\[
+\left\{
+    \begin{array}{l}
+        -x_{i}^{T}A + x_{i}x_{i}^{T}C = 0 \\
+        -x_{i}^{T}B + y_{i}x_{i}^{T}C = 0
+    \end{array}
+\right.
+\]
+\end{document}
