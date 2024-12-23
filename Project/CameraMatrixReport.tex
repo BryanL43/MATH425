@@ -23,7 +23,7 @@
 \maketitle
 
 \section{Introduction}
-In computer vision, the camera matrix P is a \( 3x 4\) matrix that defines the mathematical transformation mapping of 3-D points in world space into their corresponding 2-D coordinates on the camera's image plane. Essentially, it models how a camera captures a scene by incorporating both the intrinsic camera parameters (such as focal length, principle point, skew, and distortion scale) and extrinsic parameters (position and orientation) required for this transformation. For our computations, we will utilize the pinhole camera model. In this model, a 3-D point in the world is projected onto a 2-D image plane through a single point, the pinhole. This projection establishes a mapping between 3-D world coordinates and 2-D image coordinates, determined by the relative position of the point in relation to the camera's optical center.
+In computer vision, the camera matrix P is a \( 3x 4\) matrix that defines the mathematical transformation mapping of 3-D points in world space into their corresponding 2-D coordinates on the camera's image plane. Essentially, it models how a camera captures a scene by incorporating both the intrinsic camera parameters (such as focal length, principle point, skew, and distortion scale) and extrinsic parameters (position and orientation) required for this transformation. For our computations, we will utilize the Gold Standard Algorithm and the pinhole camera model. In this model, a 3-D point in the world is projected onto a 2-D image plane through a single point, the pinhole. This projection establishes a mapping between 3-D world coordinates and 2-D image coordinates, determined by the relative position of the point in relation to the camera's optical center.
 
 \begin{figure}[ht]
     \centering
@@ -67,7 +67,7 @@ Using \( n \geq 6 \) corresponding world and image points, we can simultaneously
 Lastly, it is crucial to append an extra coordinate of ones to the end of each corresponding point in both the image and world coordinates. This converts the Euclidean coordinates into homogeneous coordinates, allowing us to express points in a projective space. The additional coordinate enables us to represent both 2-D and 3-D points in a manner that can incorporate affine transformations (such as translation, scaling, and rotation) as well as projective transformations (such as perspective projection). This is particularly useful in applications like Homography.
 
 \section{Normalization of the image and world points}
-The first step to computing the transformation camera matrix \( P \) is to normalize the image points with their respective similarity transformation matrix \( T\). We aim to transform the points \( x_i \) into a new set of points \( \hat{x}_i \) such that the centroid of \( \hat{x}_i \) is shifted to the origin \( (0, 0)^\top \), and then scaled so that their average distance from the origin becomes \( \sqrt{2} \). Refer to Figure 3 below for more clarification. \\
+Normalization is a crucial preprocessing step in estimating the camera matrix, as it helps improve numerical stability. The first step to computing the transformation camera matrix \( P \) is to normalize the image points with their respective similarity transformation matrix \( T\). We aim to transform the points \( x_i \) into a new set of points \( \hat{x}_i \) such that the centroid of \( \hat{x}_i \) is shifted to the origin \( (0, 0)^\top \), and then scaled so that their average distance from the origin becomes \( \sqrt{2} \). Refer to Figure 3 below for more clarification. \\
 
 \noindent Given a set of 2-D image points (x, y):
 \[
@@ -189,7 +189,7 @@ C^T \tilde{X_i} \\
 \text{Note: \( x_i \) and \( y_i \) are the 2-D x and y-axis points.}
 \]
 
-\noindent Using the pinhole camera model, the 3-D points \( \tilde{P} = (A^T \tilde{X_i},\ B^T \tilde{X_i},\ C^T \tilde{X_i}) \) can be used to determine its corresponding 2-D image points \( \tilde{P_c} = (u_i, v_i) \). This relationship is derived through the principles of similar triangles, expressed mathematically as:
+\noindent Using the pinhole camera model, the 3-D points \( \tilde{P} = (A^T \tilde{X_i},\ B^T \tilde{X_i},\ C^T \tilde{X_i})^T \) can be used to determine its corresponding 2-D image points \( \tilde{P_c} = (u_i, v_i)^T \). This relationship is derived through the principles of similar triangles, expressed mathematically as:
 
 \[
 \frac{u_i}{A^T \tilde{X_i}} = \frac{v_i}{B^T \tilde{X_i}} = \frac{w_i}{C^T \tilde{X_i}}
@@ -256,7 +256,8 @@ a_{y_n}^T \\
 \text{Note: \( A \) is a \( 2n \times 12 \) matrix, and \( p \) is a \( 12 \times 1 \) column vector.}
 \]
 
-\noindent Solving \( Ap = 0 \) is equivalent to finding the null space of \( A \). This can be achieved using singular value decomposition (SVD), where \( A \) is decomposed as \( A = P \Sigma Q^T \). By selecting the last column of the orthogonal matrix \( Q \), denoted as \( p = q_{12} \), we obtain the singular vector corresponding to the smallest singular value, which minimizes geometric error. We also need to reshape the \( p \) vector back into the \( 3 \times 4 \) matrix \( \tilde{P} \): 
+\noindent Solving \( Ap = 0 \) is equivalent to finding the null space of \( A \). This can be achieved using singular value decomposition (SVD), where \( A \) is decomposed as \( A = P \Sigma Q^T \) where \( \Sigma = diag(\sigma_1, \sigma_2, ..., \sigma_n) \) contains the singular values such that 
+\( \sigma_1 \geq \sigma_2 \geq ... \geq \sigma_n \g > 0 \) . By selecting the last column of the orthogonal matrix \( Q \), denoted as \( p = q_{12} \), we obtain the singular vector corresponding to the smallest singular value, which minimizes geometric error. We also need to reshape the \( p \) vector back into the \( 3 \times 4 \) matrix \( \tilde{P} \): 
 
 \[
 p = 
