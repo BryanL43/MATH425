@@ -111,7 +111,7 @@ function P = computeCameraMatrix(x, X)
     % Solving for Ap = 0 using Singular Value Decomposition (SVD)
     [~, ~, Q] = svd(A);
  
-    % Take the last column of V as solution to minimize σ = Σ_ii
+    % Take the last column (smallest singular vector) of Q as solution to minimize σ = Σ_ii
     p = Q(:, end);
  
     % Reshape p into the 3x4 camera matrix P
@@ -138,7 +138,7 @@ x = [100, 200, 1;
 
 P_norm = computeCameraMatrix(x_normalized, X_normalized);
 disp("Normalized Camera Projection Matrix P:")
-disp(P);
+disp(P_norm);
 
 % Acquire original camera matrix by denormalize the normalized camera matrix
 P = inv(T) * P_norm * U;
